@@ -8,6 +8,13 @@ import config
 from utils.text_utils import is_chinese_string, convert_to_unicode
 from utils.logger import logger
 from corrector import Corrector
+import torch
+import os
+
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+print('device', device)
 
 class BertCorrector(Corrector):
     def __init__(self, bert_model_dir=config.bert_model_dir):
@@ -37,6 +44,7 @@ class BertCorrector(Corrector):
                     sentence_lst = list(blk_new + blk[idx:])
                     sentence_lst[idx] = self.mask
                     sentence_new = ''.join(sentence_lst)
+                    #sentence_new.to(device)                           #该应用中的唯一输入，通过该语句控制是否使用GPU
                     predicts = self.model(sentence_new)
                     top_tokens = []
                     for p in predicts:

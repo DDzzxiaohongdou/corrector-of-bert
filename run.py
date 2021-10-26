@@ -1,5 +1,4 @@
 from flask import Flask, request as freq
-from log.log import logger
 from bert_corrector import BertCorrector
 
 app = Flask(__name__)
